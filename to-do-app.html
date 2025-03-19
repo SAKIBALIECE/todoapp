@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #153677, #4e085f);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .todo-app {
+            width: 100%;
+            max-width: 540px;
+            background: #fff;
+            padding: 40px 30px 70px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .todo-app h2 {
+            color: #002765;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            background: #edeef0;
+            border-radius: 30px;
+            padding: 10px;
+        }
+        input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            border: none;
+            outline: none;
+            padding: 10px 20px;
+            background: #ff5945;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 30px;
+        }
+        ul {
+            margin-top: 20px;
+        }
+        ul li {
+            list-style: none;
+            font-size: 17px;
+            padding: 12px;
+            user-select: none;
+            cursor: pointer;
+            position: relative;
+            background: #f3f3f3;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        ul li span {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="todo-app">
+            <h2>To-Do List <img src="img/icon.png"   ></h2>
+            <div class="row">
+                <input type="text" id="input-box" placeholder="Add your task">
+                <button onclick="addTask()">Add</button>
+            </div>
+            <ul id="list-container"></ul>
+        </div>
+    </div>
+    <script>
+        const inputBox = document.getElementById("input-box");
+        const listContainer = document.getElementById("list-container");
+
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
+        function addTask() {
+            if (inputBox.value === '') {
+                alert("You must write something!");
+                return;
+            }
+            let li = document.createElement("li");
+            li.innerHTML = inputBox.value + ' <span onclick="removeTask(this)">❌</span>';
+            listContainer.appendChild(li);
+            saveTasks();
+            inputBox.value = "";
+        }
+
+        function removeTask(element) {
+            element.parentElement.remove();
+            saveTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem("tasks", listContainer.innerHTML);
+        }
+
+        function loadTasks() {
+            listContainer.innerHTML = localStorage.getItem("tasks") || "";
+            document.querySelectorAll("ul li span").forEach(span => {
+                span.addEventListener("click", function() {
+                    removeTask(this);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
